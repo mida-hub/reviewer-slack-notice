@@ -1,5 +1,7 @@
 name: slack_notice
 
+description: This GitHub Action is Slack notice to reviewer when pull request review requested.
+
 on:
   pull_request:
     types:
