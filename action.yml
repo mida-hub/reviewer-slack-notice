@@ -1,6 +1,9 @@
 name: slack_notice
-
 description: This GitHub Action is Slack notice to reviewer when pull request review requested.
+author: mida-hub
+branding:
+  icon: 'at-sign'
+  color: 'blue'
 
 on:
   pull_request:
