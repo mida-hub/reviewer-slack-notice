@@ -20,11 +20,14 @@ jobs:
 
 ## Environment Variables
 ### Set GitHub Secrets
-- slack_webhook_url : You get slack webhook token
+- slack_webhook_url : Set your Slack Incoming Webhook URL
 
 ### Make json for Mapping GitHub Users to Slack MemberID
 - configuration_path : your_repository_root/.github/workflows/slack_notice/reviewer_to_slack.json
+
+
 If you give args with `configuration_path` you can change path.
+
 
 - json : {"github-user-login": "<@slack_memberid>"}
 - How to get slack member id :
