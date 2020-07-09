@@ -71,4 +71,10 @@ github_repository=$3
 github_event_pull_request_number=$4
 slack_webhook_url=$5
 
+echo ${configuration_path}
+echo ${github_token}
+echo ${github_repository}
+echo ${github_event_pull_request_number}
+echo ${slack_webhook_url}
+
 main

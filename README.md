@@ -3,19 +3,19 @@ This GitHub Action is Slack notice to reviewer when pull request review requeste
 
 ## Usage
 ```
-  name: slack_notice
-    on: pull_request:
+name: slack_notice
+  on: 
+    pull_request:
       types:
         - review_requested
-
-  jobs:
-    notice:
-      runs-on: ubuntu-18.04
-      steps:
-        - use: mida-hub/reviewer-slack-notice@v1.0
-          with:
-            configuration_path: ".github/workflows/slack_notice/reviewer_to_slack.json"
-            slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+jobs:
+  notice:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: mida-hub/reviewer-slack-notice@v1.0
+        with:
+          configuration_path: ".github/workflows/slack_notice/reviewer_to_slack.json"
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
 ## Environment Variables

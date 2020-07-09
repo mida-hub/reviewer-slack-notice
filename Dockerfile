@@ -1,4 +1,3 @@
 FROM ubuntu:18.04
 COPY entrypoint.sh /entrypoint.sh
-# ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash"]
+ENTRYPOINT ["/entrypoint.sh"]
