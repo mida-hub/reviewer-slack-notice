@@ -10,11 +10,6 @@ on:
     types:
       - review_requested
 
-env:
-  slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-  github_token: ${{ secrets.GITHUB_TOKEN }}
-  reviewer_to_slack_json_path: ./.github/workflows/slack_notice/reviewer_to_slack.json
-
 jobs:
   notice:
     runs-on: ubuntu-18.04
