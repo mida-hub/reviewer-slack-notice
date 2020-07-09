@@ -10,6 +10,13 @@ on:
     types:
       - review_requested
 
+# env:
+#   slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+#   github_token: ${{ secrets.GITHUB_TOKEN }}
+#   github_repository: ${{ github.repository }}
+#   github_event_pull_request_number: ${{ github.event.pull_request.number }}
+#   reviewer_to_slack_json_path: ./.github/workflows/slack_notice/reviewer_to_slack.json
+
 jobs:
   notice:
     runs-on: ubuntu-18.04
@@ -23,7 +30,7 @@ jobs:
 
       - name: fetch_requested_reviewers
         run: |
-          requested_reviewers_tmp=$(curl -H "Authorization: token ${github_token}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers)
+          requested_reviewers_tmp=$(curl -H "Authorization: token ${github_token}" https://api.github.com/repos/${github_repository}/pulls/${github_event_pull_request_number}/requested_reviewers)
           requested_reviewer_users=$(echo ${requested_reviewers_tmp} | jq -r .users)
           num_reviewer=$(echo ${requested_reviewer_users} | jq length)
 
@@ -35,7 +42,7 @@ jobs:
       - name: make_text_for_slack
         run: |
           if test ${num_reviewer} -ge 1; then
-            text_for_slack='https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }} \n'
+            text_for_slack='https://github.com/${github_repository}/pull/${github_event_pull_request_number} \n'
             
             for i in $( seq 0 $((${num_reviewer}-1)) )
             do
