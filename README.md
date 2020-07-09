@@ -2,14 +2,30 @@
 This GitHub Action is Slack notice to reviewer when pull request review requested.
 
 ## Usage
-coming soon.
+```
+  name: slack_notice
+    on: pull_request:
+      types:
+        - review_requested
+
+  jobs:
+    notice:
+      runs-on: ubuntu-18.04
+      steps:
+        - use: mida-hub/reviewer-slack-notice@v1.0
+          with:
+            configuration_path: ".github/workflows/slack_notice/reviewer_to_slack.json"
+            slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+```
 
 ## Environment Variables
 ### Set GitHub Secrets
-- SLACK_WEBHOOK_URL : You get slack webhook token
+- slack_webhook_url : You get slack webhook token
 
 ### Make json for Mapping GitHub Users to Slack MemberID
-- file path : repository_root/.github/workflows/slack_notice/reviewer_to_slack.json
+- configuration_path : your_repository_root/.github/workflows/slack_notice/reviewer_to_slack.json
+If you give args with `configuration_path` you can change path.
+
 - json : {"github-user-login": "<@slack_memberid>"}
 - How to get slack member id :
 Slack > Profile > Other > MemberID
