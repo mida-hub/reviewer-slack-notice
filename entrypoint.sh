@@ -18,7 +18,7 @@ fetch_requested_reviewers(){
 
 make_text_for_slack(){
     if test ${num_reviewer} -ge 1; then
-        text_for_slack='https://github.com/${github_repository}/pull/${github_event_pull_request_number} \n'
+        text_for_slack="https://github.com/${github_repository}/pull/${github_event_pull_request_number} \n"
         
         for i in $( seq 0 $((${num_reviewer}-1)) )
         do
