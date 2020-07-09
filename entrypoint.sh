@@ -45,24 +45,11 @@ slack_notice(){
     fi
 }
 
-check_error_code(){
-    if [ $? -gt 0 ]; then
-        exit 1
-    fi
-}
-
 main(){
     get_reviewer_to_slack_json
-    check_error_code
-    
     fetch_requested_reviewers
-    check_error_code
-    
     make_text_for_slack
-    check_error_code
-
     slack_notice
-    check_error_code
 }
 
 configuration_path=$1
@@ -71,10 +58,8 @@ github_repository=$3
 github_event_pull_request_number=$4
 slack_webhook_url=$5
 
-echo ${configuration_path}
-echo ${github_token}
-echo ${github_repository}
-echo ${github_event_pull_request_number}
-echo ${slack_webhook_url}
+set -e
 
 main
+
+exit 0
