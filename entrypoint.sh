@@ -2,7 +2,7 @@
 
 get_reviewer_to_slack_json(){
     json=$(curl -H "Authorization: token ${github_token}" https://api.github.com/repos/${github_repository}/contents/${configuration_path})
-    reviewer_to_slack_json=$(echo ${json} | tr -d '[:cntrl:]' | jq -r '(.content|@base64d)')
+    reviewer_to_slack_json=$(echo ${json} | tr -d '[:cntrl:]' | jq -r '.content' | base64 --decode)
     echo ${reviewer_to_slack_json}
 }
 
