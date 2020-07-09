@@ -17,54 +17,54 @@ on:
 #   github_event_pull_request_number: ${{ github.event.pull_request.number }}
 #   reviewer_to_slack_json_path: ./.github/workflows/slack_notice/reviewer_to_slack.json
 
-jobs:
-  notice:
-    runs-on: ubuntu-18.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2.1.0
+# jobs:
+#   notice:
+runs-on: ubuntu-18.04
+steps:
+  - name: checkout
+    uses: actions/checkout@v2.1.0
 
-      - name: get_reviewer_to_slack_json
-        # json is mapping github-users-login to <@slack-memberid>
-        run: echo ::set-env name=reviewer_to_slack_json::$(cat ${reviewer_to_slack_json_path})
+  - name: get_reviewer_to_slack_json
+    # json is mapping github-users-login to <@slack-memberid>
+    run: echo ::set-env name=reviewer_to_slack_json::$(cat ${reviewer_to_slack_json_path})
 
-      - name: fetch_requested_reviewers
-        run: |
-          requested_reviewers_tmp=$(curl -H "Authorization: token ${github_token}" https://api.github.com/repos/${github_repository}/pulls/${github_event_pull_request_number}/requested_reviewers)
-          requested_reviewer_users=$(echo ${requested_reviewers_tmp} | jq -r .users)
-          num_reviewer=$(echo ${requested_reviewer_users} | jq length)
+  - name: fetch_requested_reviewers
+    run: |
+      requested_reviewers_tmp=$(curl -H "Authorization: token ${github_token}" https://api.github.com/repos/${github_repository}/pulls/${github_event_pull_request_number}/requested_reviewers)
+      requested_reviewer_users=$(echo ${requested_reviewers_tmp} | jq -r .users)
+      num_reviewer=$(echo ${requested_reviewer_users} | jq length)
 
-          echo ::set-env name=requested_reviewer_users::$(echo ${requested_reviewer_users})
-          echo ::set-env name=num_reviewer::$(echo ${num_reviewer})
-          
-          echo ${requested_reviewers_tmp}
+      echo ::set-env name=requested_reviewer_users::$(echo ${requested_reviewer_users})
+      echo ::set-env name=num_reviewer::$(echo ${num_reviewer})
+      
+      echo ${requested_reviewers_tmp}
 
-      - name: make_text_for_slack
-        run: |
-          if test ${num_reviewer} -ge 1; then
-            text_for_slack='https://github.com/${github_repository}/pull/${github_event_pull_request_number} \n'
-            
-            for i in $( seq 0 $((${num_reviewer}-1)) )
-            do
-                login=$(echo ${requested_reviewer_users} | jq -r .[$i].login)
-                slack_user_id=$(echo ${reviewer_to_slack_json} | jq -r ".[\"${login}\"]")
-                echo "${login}:${slack_user_id}"
+  - name: make_text_for_slack
+    run: |
+      if test ${num_reviewer} -ge 1; then
+        text_for_slack='https://github.com/${github_repository}/pull/${github_event_pull_request_number} \n'
+        
+        for i in $( seq 0 $((${num_reviewer}-1)) )
+        do
+            login=$(echo ${requested_reviewer_users} | jq -r .[$i].login)
+            slack_user_id=$(echo ${reviewer_to_slack_json} | jq -r ".[\"${login}\"]")
+            echo "${login}:${slack_user_id}"
 
-                text_for_slack="${text_for_slack}${slack_user_id} "
-            done
+            text_for_slack="${text_for_slack}${slack_user_id} "
+        done
 
-            text_for_slack="${text_for_slack} :review: "
-            echo ::set-env name=text_for_slack::$(echo ${text_for_slack})
-            
-            echo ${text_for_slack}
-          fi
+        text_for_slack="${text_for_slack} :review: "
+        echo ::set-env name=text_for_slack::$(echo ${text_for_slack})
+        
+        echo ${text_for_slack}
+      fi
 
-      - name: slack_notice
-        run: |
-          if test ${num_reviewer} -ge 1; then
-            text_json="{ \"text\": \"${text_for_slack}\" }"
-            curl -s -X POST \
-                -H 'Content-Type: application/json' \
-                -d "${text_json}" \
-                ${slack_webhook_url}
-          fi
+  - name: slack_notice
+    run: |
+      if test ${num_reviewer} -ge 1; then
+        text_json="{ \"text\": \"${text_for_slack}\" }"
+        curl -s -X POST \
+            -H 'Content-Type: application/json' \
+            -d "${text_json}" \
+            ${slack_webhook_url}
+      fi
