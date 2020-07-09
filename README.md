@@ -1,6 +1,8 @@
 # reviewer slack notice
 This GitHub Action is Slack notice to reviewer when pull request review requested.
 
+![image_sample](./github_actions.png)
+
 ## Usage
 ```
 name: slack_notice
