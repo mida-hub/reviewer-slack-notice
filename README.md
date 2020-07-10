@@ -14,7 +14,7 @@ jobs:
   notice:
     runs-on: ubuntu-18.04
     steps:
-      - uses: mida-hub/reviewer-slack-notice@v1.0.0
+      - uses: mida-hub/reviewer-slack-notice@v1.0.1
         with:
           configuration_path: ".github/workflows/slack_notice/reviewer_to_slack.json"
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

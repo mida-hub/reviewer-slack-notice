@@ -24,7 +24,7 @@ inputs:
   
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://mida12251141/reviewer-slack-notice:v1.0.1'
   args:
     - ${{ inputs.configuration_path }}
     - ${{ inputs.github_token }}
